@@ -157,7 +157,7 @@ function App() {
             <div className="placeholder-icon">📦</div>
             <h2>{activePage}</h2>
             <p>
-              {activePage} module will be connected with the backend API
+              {activePage} module is ready for integration here
               here.
             </p>
           </section>
