@@ -103,7 +103,7 @@ function App() {
                 <div className="card" key={stat.title}>
                   <h3>{stat.title}</h3>
                   <strong>{stat.value}</strong>
-                  <span>{stat.info}</span>
+                  <span>{stat.change}</span>
                 </div>
               ))}
             </section>
