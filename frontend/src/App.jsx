@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+
 const dashboardStats = [
   {
     title: "Total Products",
@@ -98,6 +99,7 @@ function App() {
         {/* Dashboard */}
         {activePage === "Dashboard" && (
           <>
+            {/* Dashboard Statistics */}
             <section className="stats">
               {dashboardStats.map((stat) => (
                 <div className="card" key={stat.title}>
@@ -108,6 +110,7 @@ function App() {
               ))}
             </section>
 
+            {/* Warehouse Overview + Quick Actions */}
             <section className="dashboard-grid">
               <div className="panel large">
                 <h2>Warehouse Overview</h2>
@@ -146,12 +149,14 @@ function App() {
               </div>
             </section>
 
+            {/* Recent Activity */}
             <section className="panel recent">
               <h2>Recent Activity</h2>
 
               {recentActivities.map((activity) => (
                 <div className="activity" key={activity.title}>
                   <span>{activity.icon}</span>
+
                   <div>
                     <strong>{activity.title}</strong>
                     <p>{activity.description}</p>
