@@ -1,5 +1,45 @@
 import { useState } from "react";
 import "./App.css";
+const dashboardStats = [
+  {
+    title: "Total Products",
+    value: "1,248",
+    change: "+12% this month",
+  },
+  {
+    title: "Inventory Items",
+    value: "8,542",
+    change: "+8% this week",
+  },
+  {
+    title: "Shelf Occupancy",
+    value: "76%",
+    change: "Healthy capacity",
+  },
+  {
+    title: "Active Alerts",
+    value: "12",
+    change: "Needs attention",
+  },
+];
+
+const recentActivities = [
+  {
+    icon: "🟢",
+    title: "Product detected",
+    description: "New product detected in Shelf A-12",
+  },
+  {
+    icon: "🟡",
+    title: "Low stock alert",
+    description: "Product SKU-102 is running low",
+  },
+  {
+    icon: "🔵",
+    title: "Prediction generated",
+    description: "Demand prediction updated successfully",
+  },
+];
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -59,29 +99,13 @@ function App() {
         {activePage === "Dashboard" && (
           <>
             <section className="stats">
-              <div className="card">
-                <h3>Total Products</h3>
-                <strong>1,248</strong>
-                <span>+12% this month</span>
-              </div>
-
-              <div className="card">
-                <h3>Inventory Items</h3>
-                <strong>8,542</strong>
-                <span>+8% this week</span>
-              </div>
-
-              <div className="card">
-                <h3>Shelf Occupancy</h3>
-                <strong>76%</strong>
-                <span>Healthy capacity</span>
-              </div>
-
-              <div className="card">
-                <h3>Active Alerts</h3>
-                <strong>12</strong>
-                <span>Needs attention</span>
-              </div>
+              {dashboardStats.map((stat) => (
+                <div className="card" key={stat.title}>
+                  <h3>{stat.title}</h3>
+                  <strong>{stat.value}</strong>
+                  <span>{stat.change}</span>
+                </div>
+             ))}
             </section>
 
             <section className="dashboard-grid">
@@ -124,29 +148,15 @@ function App() {
             <section className="panel recent">
               <h2>Recent Activity</h2>
 
-              <div className="activity">
-                <span>🟢</span>
-                <div>
-                  <strong>Product detected</strong>
-                  <p>New product detected in Shelf A-12</p>
+              {recentActivities.map((activity) => (
+                <div className="activity" key={activity.title}>
+                  <span>{activity.icon}</span>
+                  <div>
+                    <strong>{activity.title}</strong>
+                    <p>{activity.description}</p>
+                  </div>
                 </div>
-              </div>
-
-              <div className="activity">
-                <span>🟡</span>
-                <div>
-                  <strong>Low stock alert</strong>
-                  <p>Product SKU-102 is running low</p>
-                </div>
-              </div>
-
-              <div className="activity">
-                <span>🔵</span>
-                <div>
-                  <strong>Prediction generated</strong>
-                  <p>Demand prediction updated successfully</p>
-                </div>
-              </div>
+              ))}
             </section>
           </>
         )}
@@ -157,8 +167,7 @@ function App() {
             <div className="placeholder-icon">📦</div>
             <h2>{activePage}</h2>
             <p>
-              {activePage} module is ready for integration here
-              here.
+              {activePage} module is ready for integration here.
             </p>
           </section>
         )}
