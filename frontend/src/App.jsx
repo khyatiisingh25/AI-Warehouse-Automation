@@ -41,47 +41,6 @@ const recentActivities = [
   },
 ];
 
-const dashboardStats = [
-  {
-    title: "Total Products",
-    value: "1,248",
-    info: "+12% this month",
-  },
-  {
-    title: "Inventory Items",
-    value: "8,542",
-    info: "+8% this week",
-  },
-  {
-    title: "Shelf Occupancy",
-    value: "76%",
-    info: "Healthy capacity",
-  },
-  {
-    title: "Active Alerts",
-    value: "12",
-    info: "Needs attention",
-  },
-];
-
-const recentActivities = [
-  {
-    icon: "🟢",
-    title: "Product detected",
-    description: "New product detected in Shelf A-12",
-  },
-  {
-    icon: "🟡",
-    title: "Low stock alert",
-    description: "Product SKU-102 is running low",
-  },
-  {
-    icon: "🔵",
-    title: "Prediction generated",
-    description: "Demand prediction updated successfully",
-  },
-];
-
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
 
@@ -144,15 +103,9 @@ function App() {
                 <div className="card" key={stat.title}>
                   <h3>{stat.title}</h3>
                   <strong>{stat.value}</strong>
-<<<<<<< HEAD
-                  <span>{stat.change}</span>
-                </div>
-             ))}
-=======
                   <span>{stat.info}</span>
                 </div>
               ))}
->>>>>>> 3080ce6 (fix duplicate dashboard data)
             </section>
 
             <section className="dashboard-grid">
@@ -199,10 +152,6 @@ function App() {
               {recentActivities.map((activity) => (
                 <div className="activity" key={activity.title}>
                   <span>{activity.icon}</span>
-<<<<<<< HEAD
-=======
-
->>>>>>> 3080ce6 (fix duplicate dashboard data)
                   <div>
                     <strong>{activity.title}</strong>
                     <p>{activity.description}</p>
