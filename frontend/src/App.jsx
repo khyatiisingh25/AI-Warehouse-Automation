@@ -45,61 +45,36 @@ const recentActivities = [
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
 
-  const menuItems = [
-    "Dashboard",
-    "Inventory",
-    "Products",
-    "Shelves",
-    "Detection",
-    "Predictions",
-    "Analytics",
-    "Alerts",
-  ];
-
   return (
     <div className="app">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <div className="logo">
-          📦 <span>AI Warehouse</span>
+      <header className="header">
+        <div>
+          <h1>AI Warehouse Automation</h1>
+          <p>Smart inventory and warehouse management</p>
         </div>
+      </header>
 
-        <nav>
-          {menuItems.map((item) => (
-            <button
-              key={item}
-              className={activePage === item ? "menu active" : "menu"}
-              onClick={() => setActivePage(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </nav>
+      <nav className="nav">
+        {[
+          "Dashboard",
+          "Inventory",
+          "Demand Prediction",
+          "Shelf Occupancy",
+          "Alerts",
+        ].map((page) => (
+          <button
+            key={page}
+            onClick={() => setActivePage(page)}
+            className={activePage === page ? "active" : ""}
+          >
+            {page}
+          </button>
+        ))}
+      </nav>
 
-        <div className="sidebar-bottom">
-          <button className="menu">🔔 Alerts</button>
-          <button className="menu">⚙️ Settings</button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="main-content">
-        <header className="topbar">
-          <div>
-            <h1>{activePage}</h1>
-            <p>AI-powered warehouse automation system</p>
-          </div>
-
-          <div className="user">
-            <div className="avatar">A</div>
-            <span>Admin</span>
-          </div>
-        </header>
-
-        {/* Dashboard */}
+      <main>
         {activePage === "Dashboard" && (
           <>
-            {/* Dashboard Statistics */}
             <section className="stats">
               {dashboardStats.map((stat) => (
                 <div className="card" key={stat.title}>
@@ -110,7 +85,6 @@ function App() {
               ))}
             </section>
 
-            {/* Warehouse Overview + Quick Actions */}
             <section className="dashboard-grid">
               <div className="panel large">
                 <h2>Warehouse Overview</h2>
@@ -121,35 +95,14 @@ function App() {
                   <div>
                     <h3>AI Warehouse System</h3>
                     <p>
-                      Monitor inventory, detect products and optimize
-                      warehouse operations.
+                      Warehouse monitoring and automation system is
+                      operational.
                     </p>
                   </div>
                 </div>
               </div>
-
-              <div className="panel">
-                <h2>Quick Actions</h2>
-
-                <button className="action-btn">
-                  🔍 Detect Products
-                </button>
-
-                <button className="action-btn">
-                  📊 View Analytics
-                </button>
-
-                <button className="action-btn">
-                  🤖 Generate Prediction
-                </button>
-
-                <button className="action-btn">
-                  🔔 Check Alerts
-                </button>
-              </div>
             </section>
 
-            {/* Recent Activity */}
             <section className="panel recent">
               <h2>Recent Activity</h2>
 
@@ -167,13 +120,10 @@ function App() {
           </>
         )}
 
-        {/* Other Pages */}
         {activePage !== "Dashboard" && (
           <section className="page-placeholder">
             <div className="placeholder-icon">📦</div>
-
             <h2>{activePage}</h2>
-
             <p>
               {activePage} module is ready for integration here.
             </p>
