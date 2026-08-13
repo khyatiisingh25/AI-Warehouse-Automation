@@ -1,51 +1,40 @@
-import pandas as pd
-from pathlib import Path
+import os
 import joblib
+import pandas as pd
 
 
-# Project root directory
-BASE_DIR = Path(__file__).resolve().parents[3]
-
-DATA_FILE = (
-    BASE_DIR
-    / "ai-core"
-    / "datasets"
-    / "processed"
-    / "demand_processed.csv"
-)
-
-MODEL_FILE = (
-    BASE_DIR
-    / "ai-core"
-    / "models"
-    / "saved"
-    / "demand_model.pkl"
+MODEL_PATH = os.path.join(
+    os.path.dirname(__file__),
+    "../../models/saved/demand_model.pkl"
 )
 
 
-def predict_next_demand():
-    # Load trained model
-    model = joblib.load(MODEL_FILE)
+def predict_next_day_demand(previous_demand):
+    """
+    Predict next-day demand using the trained model.
 
-    # Load processed dataset
-    df = pd.read_csv(DATA_FILE)
+    Parameters:
+        previous_demand (float): Most recent demand value.
 
-    # Get latest demand
-    latest_demand = df["demand"].iloc[-1]
+    Returns:
+        float: Predicted next-day demand.
+    """
 
-    # Create input using the same feature name used during training
-    prediction_input = pd.DataFrame(
-        {
-            "previous_demand": [latest_demand]
-        }
-    )
+    model = joblib.load(MODEL_PATH)
 
-    # Predict next-day demand
-    prediction = model.predict(prediction_input)
+    input_data = pd.DataFrame({
+        "previous_demand": [previous_demand]
+    })
 
-    print("Latest demand:", latest_demand)
-    print("Predicted next-day demand:", round(prediction[0], 2))
+    prediction = model.predict(input_data)
+
+    return float(prediction[0])
 
 
 if __name__ == "__main__":
-    predict_next_demand()
+    latest_demand = 35
+
+    predicted_demand = predict_next_day_demand(latest_demand)
+
+    print("Latest demand:", latest_demand)
+    print("Predicted next-day demand:", round(predicted_demand, 2))
