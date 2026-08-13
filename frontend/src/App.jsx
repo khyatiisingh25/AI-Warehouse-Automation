@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
+import { getDashboardStats } from "./api/mockApi";
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
 
+  const [totalProducts, setTotalProducts] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const menuItems = [
     "Dashboard",
     "Inventory",
@@ -14,7 +18,24 @@ function App() {
     "Analytics",
     "Alerts",
   ];
+  useEffect(() => {
+    const loadDashboardStats = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
+        const data = await getDashboardStats();
+
+        setTotalProducts(data.total_products);
+      } catch (err) {
+        setError("Failed to load dashboard data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDashboardStats();
+  }, []);
   return (
     <div className="app">
       {/* Sidebar */}
@@ -60,10 +81,18 @@ function App() {
           <>
             <section className="stats">
               <div className="card">
-                <h3>Total Products</h3>
-                <strong>1,248</strong>
-                <span>+12% this month</span>
-              </div>
+  <h3>Total Products</h3>
+
+  <strong>
+    {loading
+      ? "Loading..."
+      : error
+        ? "Error"
+        : totalProducts?.toLocaleString()}
+  </strong>
+
+  <span>+12% this month</span>
+</div>
 
               <div className="card">
                 <h3>Inventory Items</h3>
