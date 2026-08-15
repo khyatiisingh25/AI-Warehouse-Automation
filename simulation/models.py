@@ -23,41 +23,79 @@ class Position:
 
 @dataclass
 class Product:
-    """Represents a product stored in the warehouse."""
+    """Represents a product in the warehouse Digital Twin."""
 
     product_id: str
-    name: str
+    sku: str
+    product_name: str
     quantity: int = 0
 
     def __post_init__(self) -> None:
         if not self.product_id.strip():
             raise ValueError("product_id cannot be empty.")
 
-        if not self.name.strip():
-            raise ValueError("Product name cannot be empty.")
+        if not self.sku.strip():
+            raise ValueError("sku cannot be empty.")
+
+        if not self.product_name.strip():
+            raise ValueError("product_name cannot be empty.")
 
         if self.quantity < 0:
             raise ValueError("Product quantity cannot be negative.")
 
-
 @dataclass
 class Shelf:
-    """Represents a warehouse shelf and its stored products."""
+    """Represents a warehouse shelf in the Digital Twin."""
 
     shelf_id: str
     position: Position
+    shelf_code: str = ""
+    zone: str = ""
+    rack: str = ""
+    level: int = 0
+    max_capacity: int = 0
+    current_capacity: int = 0
+    status: str = "Available"
     products: list[Product] = field(default_factory=list)
 
     def __post_init__(self) -> None:
         if not self.shelf_id.strip():
             raise ValueError("shelf_id cannot be empty.")
 
+        if self.shelf_code and not self.shelf_code.strip():
+            raise ValueError("shelf_code cannot be blank.")
+
+        if self.zone and not self.zone.strip():
+            raise ValueError("zone cannot be blank.")
+
+        if self.rack and not self.rack.strip():
+            raise ValueError("rack cannot be blank.")
+
+        if self.level < 0:
+            raise ValueError("level cannot be negative.")
+
+        if self.max_capacity < 0:
+            raise ValueError("max_capacity cannot be negative.")
+
+        if self.current_capacity < 0:
+            raise ValueError("current_capacity cannot be negative.")
+
+        if (
+            self.max_capacity > 0
+            and self.current_capacity > self.max_capacity
+        ):
+            raise ValueError(
+                "current_capacity cannot exceed max_capacity."
+            )
+
     @property
     def is_occupied(self) -> bool:
-        """Return True when the shelf contains at least one product."""
+        """Return True when the shelf contains stored products."""
 
-        return any(product.quantity > 0 for product in self.products)
-
+        return self.current_capacity > 0 or any(
+            product.quantity > 0
+            for product in self.products
+        )
 
 @dataclass
 class Warehouse:
