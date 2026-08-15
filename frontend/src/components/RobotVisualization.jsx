@@ -21,8 +21,10 @@ function RobotVisualization({
   robotId,
   currentPosition,
   targetPosition,
-  route = [],
-  state = ROBOT_STATES.IDLE,
+  route,
+  state,
+  blockedPositions = [],
+  shelves = [],
 }) {
   if (!rows || !columns || rows <= 0 || columns <= 0) {
     return (
@@ -47,6 +49,13 @@ function RobotVisualization({
       const isCurrent = isSamePosition(position, currentPosition);
       const isTarget = isSamePosition(position, targetPosition);
       const isRoute = isRoutePosition(position, route);
+      const isBlocked = blockedPositions.some(
+        (blocked) => blocked.row === row && blocked.column === column
+     );
+
+    const shelf = shelves.find(
+      (item) => item.row === row && item.column === column
+    );
 
       gridCells.push(
         <div
@@ -56,6 +65,8 @@ function RobotVisualization({
             isRoute ? "robot-grid__cell--route" : "",
             isTarget ? "robot-grid__cell--target" : "",
             isCurrent ? "robot-grid__cell--current" : "",
+            isBlocked ? "robot-grid__cell--blocked" : "",
+            shelf ? "robot-grid__cell--shelf" : "",
           ]
             .filter(Boolean)
             .join(" ")}
@@ -69,6 +80,23 @@ function RobotVisualization({
               🤖
             </span>
           )}
+          {shelf && (
+  <span
+    className="robot-shelf"
+    title={`Shelf ${shelf.shelfId}`}
+  >
+    📦
+  </span>
+)}
+
+{isBlocked && (
+  <span
+    className="robot-blocked"
+    title="Blocked position"
+  >
+    🚫
+  </span>
+)}
 
           {isTarget && !isCurrent && (
             <span className="robot-target" title="Target position">
