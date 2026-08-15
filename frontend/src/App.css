@@ -594,6 +594,9 @@ button {
   .main-content {
     padding: 30px 35px 50px;
   }
+    .topbar {
+    flex-wrap: wrap;
+  }
 }
 
 
