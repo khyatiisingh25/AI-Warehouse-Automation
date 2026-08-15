@@ -39,8 +39,14 @@ class Robot:
 
     @property
     def position(self) -> Position:
-        """Return the robot's current position."""
+        """Backward-compatible access to the robot's current position."""
+
         return self.current_position
+
+    def move_to(self, position: Position) -> None:
+        """Move the robot directly to a position."""
+
+        self.current_position = position
 
     def set_target(self, target: Position) -> None:
         """Set the robot's target position."""
@@ -53,10 +59,7 @@ class Robot:
         self,
         pathfinder: AStarPathfinder,
     ) -> list[Position] | None:
-        """
-        Calculate a route from the current position to the target
-        using the existing A* pathfinder.
-        """
+        """Calculate a route from current position to target."""
 
         if self.target_position is None:
             raise ValueError("Robot target position is not set.")
@@ -85,27 +88,8 @@ class Robot:
 
         return self.route
 
-    def move_to(self, position: Position) -> None:
-        """
-        Move the robot directly to a position.
-
-        Kept for compatibility with the existing simulation API.
-        Route-based movement should use move_next().
-        """
-
-        self.current_position = position
-
-        if self.target_position == position:
-            self.state = RobotState.COMPLETED
-        else:
-            self.state = RobotState.MOVING
-
     def move_next(self) -> bool:
-        """
-        Move the robot to the next position in its calculated route.
-
-        Returns True if the robot moved, otherwise False.
-        """
+        """Move the robot to the next position in its calculated route."""
 
         if self.target_position is None:
             self.state = RobotState.IDLE
@@ -120,7 +104,6 @@ class Robot:
             self.state = RobotState.WAITING
             return False
 
-        # A* route normally includes the current position.
         if self.route[0] == self.current_position:
             self.route.pop(0)
 
@@ -138,7 +121,7 @@ class Robot:
         return True
 
     def block(self) -> None:
-        """Mark the robot as blocked by an obstacle."""
+        """Mark the robot as blocked by a dynamic obstacle."""
 
         self.state = RobotState.BLOCKED
 
@@ -148,7 +131,7 @@ class Robot:
         self.state = RobotState.WAITING
 
     def reset(self) -> None:
-        """Reset the robot to the idle state."""
+        """Reset the robot to its idle state."""
 
         self.target_position = None
         self.route = []
