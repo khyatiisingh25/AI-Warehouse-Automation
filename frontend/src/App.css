@@ -669,3 +669,96 @@ button {
     padding: 22px 15px 35px;
   }
 }
+.inventory-section {
+  margin-top: 24px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+}
+
+.inventory-section__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.inventory-section__header h2 {
+  margin: 0;
+}
+
+.inventory-section__header p {
+  margin: 5px 0 0;
+  color: #64748b;
+}
+
+.inventory-count {
+  padding: 6px 12px;
+  background: #f1f5f9;
+  border-radius: 20px;
+}
+
+.inventory-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inventory-table th,
+.inventory-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.inventory-table th {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.inventory-product {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inventory-product span {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.inventory-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.healthy {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.low-stock {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.out-of-stock {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.inventory-empty {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.inventory-empty__icon {
+  font-size: 40px;
+}

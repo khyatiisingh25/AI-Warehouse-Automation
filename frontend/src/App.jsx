@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { getDashboardStats } from "./api/mockApi";
+import { getDashboardStats, getInventoryMockData } from "./api/mockApi";
 import DetectionPanel from "./components/DetectionPanel";
+import RobotVisualization from "./components/RobotVisualization";
+import InventoryTable from "./components/InventoryTable";
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -9,6 +11,9 @@ function App() {
   // Mock API state
   const [totalProducts, setTotalProducts] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [inventory, setInventory] = useState([]);
+  const [inventoryLoading, setInventoryLoading] = useState(false);
+  const [inventoryError, setInventoryError] = useState("");
   const [error, setError] = useState("");
 
   const menuItems = [
@@ -42,6 +47,48 @@ function App() {
 
     loadDashboardStats();
   }, []);
+  useEffect(() => {
+    if (activePage === "Inventory") {
+      setInventoryLoading(true);
+      setInventoryError("");
+
+      getInventoryMockData()
+        .then((data) => {
+          setInventory(data);
+        })
+        .catch((err) => {
+          console.error("Inventory error:", err);
+          setInventoryError("Failed to load inventory");
+        })
+        .finally(() => {
+          setInventoryLoading(false);
+        });
+    }
+  }, [activePage]);
+  const robotData = {
+    rows: 8,
+    columns: 10,
+    robotId: "AGV-01",
+    currentPosition: {
+      row: 2,
+      column: 3,
+    },
+    targetPosition: {
+      row: 5,
+      column: 7,
+    },
+    route: [
+      { row: 2, column: 3 },
+      { row: 2, column: 4 },
+      { row: 2, column: 5 },
+      { row: 3, column: 5 },
+      { row: 4, column: 5 },
+      { row: 5, column: 5 },
+      { row: 5, column: 6 },
+      { row: 5, column: 7 },
+    ],
+    state: "MOVING",
+  };
 
   return (
     <div className="app">
@@ -126,6 +173,16 @@ function App() {
               </div>
             </section>
 
+            <RobotVisualization
+              rows={robotData.rows}
+              columns={robotData.columns}
+              robotId={robotData.robotId}
+              currentPosition={robotData.currentPosition}
+              targetPosition={robotData.targetPosition}
+              route={robotData.route}
+              state={robotData.state}
+            />
+
             {/* ================= DASHBOARD GRID ================= */}
             <section className="dashboard-grid">
               {/* Warehouse Overview */}
@@ -205,19 +262,35 @@ function App() {
         {/* ================= OTHER PAGES ================= */}
         {activePage !== "Dashboard" && (
           <>
-            {activePage === "Detection" ? (
-              <DetectionPanel />
-            ) : (
-              <section className="page-placeholder">
-                <div className="placeholder-icon">📦</div>
+           {activePage === "Detection" ? (
+  <DetectionPanel />
+) : activePage === "Inventory" ? (
+  inventoryLoading ? (
+  <section className="page-placeholder">
+    <div className="placeholder-icon">📦</div>
+    <h2>Inventory</h2>
+    <p>Loading inventory...</p>
+  </section>
+) : inventoryError ? (
+  <section className="page-placeholder">
+    <div className="placeholder-icon">⚠️</div>
+    <h2>Inventory Error</h2>
+    <p>{inventoryError}</p>
+  </section>
+) : (
+  <InventoryTable inventory={inventory} />
+)
+) : (
+  <section className="page-placeholder">
+    <div className="placeholder-icon">📦</div>
 
-                <h2>{activePage}</h2>
+    <h2>{activePage}</h2>
 
-                <p>
-                {activePage} module will be connected with the backend API here.
-                </p>
-              </section>
-           )}
+    <p>
+      {activePage} module will be connected with the backend API here.
+    </p>
+  </section>
+)}
           </>
      )}
       </main>
