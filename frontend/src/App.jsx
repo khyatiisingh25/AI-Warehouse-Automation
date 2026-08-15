@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { getDashboardStats } from "./api/mockApi";
+import DetectionPanel from "./components/DetectionPanel";
 
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -203,17 +204,22 @@ function App() {
 
         {/* ================= OTHER PAGES ================= */}
         {activePage !== "Dashboard" && (
-          <section className="page-placeholder">
-            <div className="placeholder-icon">📦</div>
+          <>
+            {activePage === "Detection" ? (
+              <DetectionPanel />
+            ) : (
+              <section className="page-placeholder">
+                <div className="placeholder-icon">📦</div>
 
-            <h2>{activePage}</h2>
+                <h2>{activePage}</h2>
 
-            <p>
-              {activePage} module will be connected with the backend API
-              here.
-            </p>
-          </section>
-        )}
+                <p>
+                {activePage} module will be connected with the backend API here.
+                </p>
+              </section>
+           )}
+          </>
+     )}
       </main>
     </div>
   );
