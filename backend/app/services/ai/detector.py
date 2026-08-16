@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 from ultralytics import YOLO
 
@@ -14,7 +15,7 @@ class YOLODetector:
     def __init__(self, model_path: str = "yolov8n.pt") -> None:
         self.model = YOLO(model_path)
 
-    def predict(self, image_path: str) -> list[DetectionResult]:
+    def predict(self, image_path: str) -> List[DetectionResult]:
         """Run object detection on an image."""
 
         if not Path(image_path).is_file():
@@ -27,7 +28,7 @@ class YOLODetector:
             verbose=False,
         )
 
-        detections: list[DetectionResult] = []
+        detections: List[DetectionResult] = []
 
         for result in results:
             names = result.names

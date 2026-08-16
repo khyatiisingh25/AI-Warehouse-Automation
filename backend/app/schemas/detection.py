@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel, Field
 
 
@@ -15,4 +17,4 @@ class DetectionResult(BaseModel):
 
 
 class DetectionResponse(BaseModel):
-    detections: list[DetectionResult]
+    detections: List[DetectionResult]
