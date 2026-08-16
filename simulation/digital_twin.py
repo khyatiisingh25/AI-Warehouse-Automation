@@ -26,12 +26,53 @@ class DigitalTwinSimulation:
         self.warehouse_manager = WarehouseManager(warehouse)
         self.robots = robots
         self.pathfinder = AStarPathfinder(self.warehouse_manager)
+        self.running = False
 
     @property
     def warehouse(self) -> Warehouse:
         """Return the underlying warehouse model."""
 
         return self.warehouse_manager.warehouse
+
+    def start(self) -> None:
+        """Start the Digital Twin simulation."""
+
+        self.running = True
+
+        for robot in self.robots:
+            if (
+                robot.target_position is not None
+                and robot.state == RobotState.IDLE
+            ):
+                robot.calculate_route(self.pathfinder)
+
+
+    def reset(self) -> None:
+        """Reset the simulation to its initial state."""
+
+        self.warehouse_manager = WarehouseManager(
+            Warehouse(rows=5, columns=5)
+        )
+
+        self.warehouse_manager.add_shelf(
+            Shelf(
+                shelf_id="S1",
+                position=Position(2, 2),
+            )
+        )
+
+        self.robots = [
+            Robot(
+                robot_id="R1",
+                current_position=Position(0, 0),
+                target_position=Position(4, 4),
+                state=RobotState.IDLE,
+            )
+        ]
+
+        self.pathfinder = AStarPathfinder(self.warehouse_manager)
+        self.calculate_routes()
+        self.running = False
 
     def calculate_routes(self) -> None:
         """Calculate routes for robots that have targets."""

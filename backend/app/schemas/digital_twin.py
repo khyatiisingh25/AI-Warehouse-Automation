@@ -5,7 +5,7 @@ This module defines the data contract consumed by the backend/API layer.
 It does not contain simulation logic.
 """
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from simulation.robot import RobotState
 
@@ -26,7 +26,7 @@ class RobotStateResponse(BaseModel):
     current_position: PositionResponse
     target_position: PositionResponse | None = None
     state: RobotState
-    route: list[PositionResponse] = []
+    route: list[PositionResponse] = Field(default_factory=list)
 
 
 class WarehouseStateResponse(BaseModel):
@@ -36,3 +36,4 @@ class WarehouseStateResponse(BaseModel):
     columns: int
     blocked_positions: list[PositionResponse]
     robots: list[RobotStateResponse]
+    running: bool

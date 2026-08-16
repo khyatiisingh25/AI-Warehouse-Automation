@@ -60,6 +60,7 @@ class DigitalTwinStateService:
         cls,
         warehouse: Warehouse,
         robots: list[Robot],
+        running: bool = False,
     ) -> WarehouseStateResponse:
         """
         Convert the current Digital Twin warehouse state
@@ -79,4 +80,5 @@ class DigitalTwinStateService:
                 cls.robot_to_response(robot)
                 for robot in robots
             ],
+            running=running,
         )

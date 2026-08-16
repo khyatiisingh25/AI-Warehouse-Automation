@@ -2,7 +2,7 @@
 FastAPI endpoints for Digital Twin state and simulation control.
 """
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.schemas.digital_twin import WarehouseStateResponse
 from app.services.digital_twin import DigitalTwinStateService
@@ -20,6 +20,16 @@ router = APIRouter(
 simulation = create_default_simulation()
 
 
+def _get_state() -> WarehouseStateResponse:
+    """Convert the current simulation state into an API response."""
+
+    return DigitalTwinStateService.warehouse_to_response(
+        simulation.warehouse,
+        simulation.robots,
+        running=simulation.running,
+    )
+
+
 @router.get(
     "/state",
     response_model=WarehouseStateResponse,
@@ -27,10 +37,25 @@ simulation = create_default_simulation()
 def get_digital_twin_state() -> WarehouseStateResponse:
     """Return the latest Digital Twin simulation state."""
 
-    return DigitalTwinStateService.warehouse_to_response(
-        simulation.warehouse,
-        simulation.robots,
-    )
+    return _get_state()
+
+
+@router.post(
+    "/start",
+    response_model=WarehouseStateResponse,
+)
+def start_digital_twin() -> WarehouseStateResponse:
+    """Start the Digital Twin simulation."""
+
+    try:
+        simulation.start()
+    except (ValueError, RuntimeError) as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Unable to start Digital Twin simulation: {exc}",
+        ) from exc
+
+    return _get_state()
 
 
 @router.post(
@@ -40,9 +65,36 @@ def get_digital_twin_state() -> WarehouseStateResponse:
 def advance_digital_twin() -> WarehouseStateResponse:
     """Advance the Digital Twin simulation by one movement step."""
 
-    simulation.step()
+    if not simulation.running:
+        raise HTTPException(
+            status_code=409,
+            detail="Digital Twin simulation is not running.",
+        )
 
-    return DigitalTwinStateService.warehouse_to_response(
-        simulation.warehouse,
-        simulation.robots,
-    )
+    try:
+        simulation.step()
+    except (ValueError, RuntimeError) as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Unable to advance Digital Twin simulation: {exc}",
+        ) from exc
+
+    return _get_state()
+
+
+@router.post(
+    "/reset",
+    response_model=WarehouseStateResponse,
+)
+def reset_digital_twin() -> WarehouseStateResponse:
+    """Reset the Digital Twin simulation to its initial state."""
+
+    try:
+        simulation.reset()
+    except (ValueError, RuntimeError) as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Unable to reset Digital Twin simulation: {exc}",
+        ) from exc
+
+    return _get_state()
