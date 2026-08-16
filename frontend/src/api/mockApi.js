@@ -43,3 +43,48 @@ export const getInventoryMockData = () => {
     }, 500);
   });
 };
+export const getDigitalTwinMockData = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        rows: 8,
+        columns: 10,
+        robotId: "AGV-01",
+
+        currentPosition: {
+          row: 2,
+          column: 3,
+        },
+
+        targetPosition: {
+          row: 5,
+          column: 7,
+        },
+
+        route: [
+          { row: 2, column: 3 },
+          { row: 2, column: 4 },
+          { row: 2, column: 5 },
+          { row: 3, column: 5 },
+          { row: 4, column: 5 },
+          { row: 5, column: 5 },
+          { row: 5, column: 6 },
+          { row: 5, column: 7 },
+        ],
+
+        state: "MOVING",
+
+        blockedPositions: [
+          { row: 1, column: 2 },
+          { row: 4, column: 4 },
+        ],
+
+        shelves: [
+          { row: 1, column: 5, shelfId: "S-01" },
+          { row: 3, column: 2, shelfId: "S-02" },
+          { row: 6, column: 8, shelfId: "S-03" },
+        ],
+      });
+    }, 500);
+  });
+};
