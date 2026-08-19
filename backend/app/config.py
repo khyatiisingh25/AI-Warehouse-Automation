@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str
     API_V1_PREFIX: str
     SECRET_KEY: str
+    ALGORITHM: str = "HS256"
     DATABASE_URL: str
     DEBUG: bool = True
 
